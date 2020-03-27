@@ -1,4 +1,4 @@
-//module to hold all DOM components
+//Module to hold all DOM components
 
 export const base = {
   searchField: document.querySelector('.search__field'),

@@ -1,18 +1,43 @@
 import {base} from './base'
 
+//Get search query
 export const getQuery = () => {
   const query = base.searchField.value
   return query;
+};
+
+//Clear search field
+export const clearField = () => {
+  base.searchField.value = '';
 }
 
-//function to render all
+//Clear UI
+export const clearResults = () => {
+  base.results.innerHTML = '';
+}
+
+//Shorten title
+const shortenRecipeTitle = (title, limit) => {
+  const arrTitle = title.split(/[\s-]+/);
+  const newTitle = [];
+  for(let i = 0; i < limit; i++) {
+    newTitle.push(arrTitle[i]);
+  }
+  console.log(`${newTitle.join(' ')}...${arrTitle[arrTitle.length - 1]}`);
+}
+
+//Render all results
 export const renderAll = (results) => {
   results.forEach(renderOne);
 };
 
-//function to render one result
+//Render one result
 const renderOne = (result) => {
-  //replace html text with 1.result.image_url 2.result.recipe_id 3.result.title 4.result.publisher
+  /*
+  1.result.image_url 
+  2.result.recipe_id 
+  3.result.title 
+  4.result.publisher*/
   let insert = `
   <a class="results__link results__link--active" href=${result.recipe_id}>
   <figure class="results__fig">
@@ -24,6 +49,6 @@ const renderOne = (result) => {
   </div>
 </a>
   `;
-  //inject html
+  //Inject into UI
   base.results.insertAdjacentHTML('beforeend', insert);
 };
