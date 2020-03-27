@@ -1,29 +1,40 @@
-import {base} from './base'
+import {domElements} from './base'
+import {loader} from './base'
+
+//Render Loader
+export const renderLoader = parent => {
+  parent.insertAdjacentHTML('afterbegin',loader);
+}
+
+//Clear Loader
+export const clearLoader = parent => {
+  parent.innerHTML = '';
+}
 
 //Get search query
 export const getQuery = () => {
-  const query = base.searchField.value
+  const query = domElements.searchField.value
   return query;
 };
 
 //Clear search field
 export const clearField = () => {
-  base.searchField.value = '';
+  domElements.searchField.value = '';
 }
 
 //Clear UI
 export const clearResults = () => {
-  base.results.innerHTML = '';
+  domElements.resultList.innerHTML = '';
 }
 
 //Shorten title
-const shortenRecipeTitle = (title, limit) => {
-  const arrTitle = title.split(/[\s-]+/);
+const shortenRecipeTitle = (title, limit = 3) => {
+  const arrTitle = title.split(/[\s]+/);
   const newTitle = [];
   for(let i = 0; i < limit; i++) {
     newTitle.push(arrTitle[i]);
   }
-  console.log(`${newTitle.join(' ')}...${arrTitle[arrTitle.length - 1]}`);
+  return `${newTitle.join(' ')} ...${arrTitle[arrTitle.length - 1]}`;
 }
 
 //Render all results
@@ -39,16 +50,18 @@ const renderOne = (result) => {
   3.result.title 
   4.result.publisher*/
   let insert = `
-  <a class="results__link results__link--active" href=${result.recipe_id}>
-  <figure class="results__fig">
-      <img src=${result.image_url} alt=${result.title}>
-  </figure>
-  <div class="results__data">
-      <h4 class="results__name">${result.title}</h4>
-      <p class="results__author">${result.publisher}</p>
-  </div>
-</a>
+  <li>
+    <a class="results__link" href=${result.recipe_id}>
+      <figure class="results__fig">
+        <img src=${result.image_url} alt=${result.title}>
+      </figure>
+      <div class="results__data">
+        <h4 class="results__name">${shortenRecipeTitle(result.title)}</h4>
+        <p class="results__author">${result.publisher}</p>
+      </div>
+    </a>
+ </li>
   `;
   //Inject into UI
-  base.results.insertAdjacentHTML('beforeend', insert);
+  domElements.resultList.insertAdjacentHTML('beforeend', insert);
 };

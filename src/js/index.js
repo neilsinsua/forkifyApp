@@ -1,12 +1,12 @@
 import {SearchResult} from './models/Search'
 import * as searchView from './views/searchView'
-import {base} from './views/base'
+import {domElements} from './views/base'
 
 //create an object to hold states
 const state = {};
 
 //When user licks search button trigger:
-base.searchForm.addEventListener('submit', async (event) => {
+domElements.searchForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   //Get query from form field
   const query = searchView.getQuery(); //some function in view()
@@ -15,6 +15,8 @@ base.searchForm.addEventListener('submit', async (event) => {
   searchView.clearField();
   //Clear UI results
   searchView.clearResults();
+  //Render Loader
+  searchView.renderLoader(domElements.resultList);
   
 
   if(query) {
@@ -24,10 +26,12 @@ base.searchForm.addEventListener('submit', async (event) => {
     const results = await state.search.search();
     state.search.result = results.data.recipes;
     console.log(state);
-    //Render each result to UI
-    searchView.renderAll(state.search.result);
+    //Clear Loader
+    searchView.clearLoader(domElements.resultList);
+    
   };
-
+  //Render each result to UI
+  searchView.renderAll(state.search.result);
   
 
 });
