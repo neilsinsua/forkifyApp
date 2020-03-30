@@ -1,5 +1,4 @@
-import {domElements} from './base'
-import {loader} from './base'
+import {domElements, loader, pageButton} from './base'
 
 //Render Loader
 export const renderLoader = parent => {
@@ -38,9 +37,37 @@ const shortenRecipeTitle = (title, limit = 3) => {
 }
 
 //Render all results
-export const renderAll = (results) => {
-  results.forEach(renderOne);
+export const renderAll = (results, page = 1, resPerPage = 10) => {
+  //Number of pages
+  const pages = Math.ceil(results.length / resPerPage);
+  //Render pages
+  results.slice((page - 1) * (resPerPage), (page) * (resPerPage)).forEach(renderOne);
+  //Render buttons
+  renderButtons(page, pages);
 };
+
+const renderButtons = (page, pages) => {
+  let button;
+  //Prepare UI
+  domElements.resultPages.innerHTML = '';
+  if(page == 1 && pages > 1) {
+    //Render Next Button only
+    button = pageButton(page, 'next');
+  } else if(page < pages) {
+    //Render Both buttons
+    button = `
+      ${pageButton(page, 'next')}
+      ${pageButton(page, 'prev')}
+      `;
+  } else if(page == pages && pages > 1) {
+    //Render Prev Button only
+    button = pageButton(page, 'prev');
+  }
+  console.log(button);
+  //Render button to UI
+  domElements.resultPages.insertAdjacentHTML('afterbegin', button)
+}
+
 
 //Render one result
 const renderOne = (result) => {
