@@ -1,12 +1,18 @@
-import {SearchResult} from './models/Search'
-import * as searchView from './views/searchView'
-import {domElements} from './views/base'
+import {SearchResult} from './models/Search';
+import * as searchView from './views/searchView';
+import {domElements} from './views/base';
+import {Recipe} from './models/Recipe';
 
 //create an object to hold states
 const state = {};
 
-//When user clicks search button:
-domElements.searchForm.addEventListener('submit', async (event) => {
+//clear Hash
+window.location.hash = '';
+
+//****SEARCH CONTROLLER:
+
+//Actual controller
+const controlSearch = async (event) => {
   event.preventDefault();
   //Get query from form field
   const query = searchView.getQuery(); //some function in view()
@@ -21,10 +27,8 @@ domElements.searchForm.addEventListener('submit', async (event) => {
   if(query) {
     //Create new search object and store in state
     state.search = new SearchResult(query);
-    //Execute search method and store results in object
-    const results = await state.search.search();
-    state.search.result = results.data.recipes;
-    console.log(state);
+    //Call search method
+    await state.search.getFood();
     //Clear Loader
     searchView.clearLoader(domElements.resultList);
     
@@ -33,7 +37,10 @@ domElements.searchForm.addEventListener('submit', async (event) => {
   searchView.renderAll(state.search.result);
   
 
-});
+};
+
+//Add event listener
+domElements.searchForm.addEventListener('submit', controlSearch);
 
 
 domElements.resultPages.addEventListener('click', (e) => {
@@ -47,3 +54,30 @@ domElements.resultPages.addEventListener('click', (e) => {
     searchView.renderAll(state.search.result, Number(btn.dataset.goto));
   }
 })
+
+//****RECIPE CONTROLLER:
+
+//Actual controller
+const controlRecipe = async () => {
+  //Get recipe id stored in hash
+  const id = window.location.hash.replace('#', '');
+
+  if(id) {
+    //Create new Recipe
+    state.recipe = new Recipe(id);
+    //Get recipe data
+    await state.recipe.getRecipe();
+    //Call calc time
+    state.recipe.calcTime();
+    //Call calc servings
+    state.recipe.calcServings();
+  }
+};
+
+//Add event listener
+window.addEventListener('hashchange', controlRecipe);
+
+state.recipe = new Recipe(47746);
+
+
+

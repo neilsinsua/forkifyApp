@@ -63,7 +63,7 @@ const renderButtons = (page, pages) => {
     //Render Prev Button only
     button = pageButton(page, 'prev');
   }
-  console.log(button);
+
   //Render button to UI
   domElements.resultPages.insertAdjacentHTML('afterbegin', button)
 }
@@ -78,7 +78,7 @@ const renderOne = (result) => {
   4.result.publisher*/
   let insert = `
   <li>
-    <a class="results__link" href=${result.recipe_id}>
+    <a class="results__link" href=#${result.recipe_id}>
       <figure class="results__fig">
         <img src=${result.image_url} alt=${result.title}>
       </figure>
