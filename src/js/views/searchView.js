@@ -46,29 +46,6 @@ export const renderAll = (results, page = 1, resPerPage = 10) => {
   renderButtons(page, pages);
 };
 
-const renderButtons = (page, pages) => {
-  let button;
-  //Prepare UI
-  domElements.resultPages.innerHTML = '';
-  if(page == 1 && pages > 1) {
-    //Render Next Button only
-    button = pageButton(page, 'next');
-  } else if(page < pages) {
-    //Render Both buttons
-    button = `
-      ${pageButton(page, 'next')}
-      ${pageButton(page, 'prev')}
-      `;
-  } else if(page == pages && pages > 1) {
-    //Render Prev Button only
-    button = pageButton(page, 'prev');
-  }
-
-  //Render button to UI
-  domElements.resultPages.insertAdjacentHTML('afterbegin', button)
-}
-
-
 //Render one result
 const renderOne = (result) => {
   /*
@@ -92,3 +69,28 @@ const renderOne = (result) => {
   //Inject into UI
   domElements.resultList.insertAdjacentHTML('beforeend', insert);
 };
+
+
+const renderButtons = (page, pages) => {
+  let button;
+  //Prepare UI
+  domElements.resultPages.innerHTML = '';
+  if(page == 1 && pages > 1) {
+    //Render Next Button only
+    button = pageButton(page, 'next');
+  } else if(page < pages) {
+    //Render Both buttons
+    button = `
+      ${pageButton(page, 'next')}
+      ${pageButton(page, 'prev')}
+      `;
+  } else if(page == pages && pages > 1) {
+    //Render Prev Button only
+    button = pageButton(page, 'prev');
+  }
+
+  //Render button to UI
+  domElements.resultPages.insertAdjacentHTML('afterbegin', button)
+}
+
+

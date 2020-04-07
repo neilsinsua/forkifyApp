@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 export class Recipe {
   //Recipe id
   constructor(id) {
@@ -34,18 +33,18 @@ export class Recipe {
   }
 
   ingredientSplitter (ingredient) {
-    //list of units
+    //List of units
     const unitShort = ['tbsp', 'tbsp', 'tsp', 'tsp', 'oz', 'oz', 'cup', 'cup', 'lb', 'lb'];
-    //convert ingredient into array
+    //Convert ingredient into array
     const ingredientArr = ingredient.split(' ');
-    //find index of unit in array
+    //Find index of unit in array
     const unitIndex = ingredientArr.findIndex(el => {
       return unitShort.includes(el)
     });
     //Scenario1: yes amount, yes unit 
     if(unitIndex > -1) {
       return {
-      amount: eval(ingredientArr.slice(0, unitIndex).join('+')),
+      amount: eval(ingredientArr.slice(0, unitIndex).join('+')).toFixed(1),
       unit: ingredientArr[unitIndex],
       ingredient: ingredientArr.slice(unitIndex + 1).join(' ')
       };
@@ -69,23 +68,25 @@ export class Recipe {
   parseIngredients() {
     const unitLong = ['tablespoons', 'tablespoon', 'teaspoons', 'teaspoon', 'ounces', 'ounce', 'cups', 'cup', 'pounds', 'pound'];
     const unitShort = ['tbsp', 'tbsp', 'tsp', 'tsp', 'oz', 'oz', 'cup', 'cup', 'lb', 'lb'];
+    //Create new array of standardized ingredients
     let stdIngredient = this.ingredients.map(el => {
+
       //Shorten unit spelling
       let ingredient = el.toLowerCase();
       unitLong.forEach((el, i) => {
         ingredient = ingredient.replace(el, unitShort[i]);
       });
-      
+
       //Remove parentheses with spaces: 1 cup (20 ounces) flour
       ingredient = ingredient.replace(/ \((.*?)\) /g, ' ');
       //Remove parentheses without: flour(20 ounces)
       ingredient = ingredient.replace(/\((.*?)\)/g,'');
 
-      //Parse ingredients into amount, unit, name
+      //Object of parsed ingredients into amount, unit, name
       ingredient = this.ingredientSplitter(ingredient);
 
       return ingredient;
     });
-    console.log(stdIngredient);
+    this.stdIngredients = stdIngredient;
   }
 }

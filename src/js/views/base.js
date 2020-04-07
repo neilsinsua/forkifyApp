@@ -8,7 +8,19 @@ export const domElements = {
   results: document.querySelector('.results'),
   titleLength: document.querySelector('.title__length'),
   resultPages: document.querySelector('.results__pages'),
+  recipe: document.querySelector('.recipe'),
+  ingredlist: document.querySelector('.recipe__ingredient-list'),
 };
+
+//Render Loader
+export const renderLoader = parent => {
+  parent.insertAdjacentHTML('afterbegin',loader);
+}
+
+//Clear Loader
+export const clearLoader = parent => {
+  parent.innerHTML = '';
+}
 
 //Loading Spinner
 export const loader = `
@@ -30,3 +42,4 @@ export const pageButton = (page, type) => {
   </button>
  `
 };
+
